@@ -1,0 +1,18 @@
+# Game files: bring your own APK. Nothing from the game belongs in this repo.
+*.apk
+/work/
+
+# Fetched by port/setup.ps1
+/port/externals/boost_1_86_0/
+/port/externals/dynarmic/
+/port/externals/SDL2-2.32.10/
+/tools/jadx/
+
+# Build output
+/port/build/
+/port/bin/
+
+# Local notes
+/PICKUP.md
+
+__pycache__/

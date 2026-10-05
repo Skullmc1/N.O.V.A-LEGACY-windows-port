@@ -1,0 +1,11 @@
+# Minimal stand-in for Boost's CMake package: header-only use by dynarmic.
+set(Boost_FOUND TRUE)
+set(Boost_INCLUDE_DIRS ${NOVA_BOOST_INCLUDE})
+set(Boost_INCLUDE_DIR ${NOVA_BOOST_INCLUDE})
+set(Boost_VERSION 1.86.0)
+foreach(t Boost::boost Boost::headers)
+    if(NOT TARGET ${t})
+        add_library(${t} INTERFACE IMPORTED GLOBAL)
+        set_target_properties(${t} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${NOVA_BOOST_INCLUDE})
+    endif()
+endforeach()
