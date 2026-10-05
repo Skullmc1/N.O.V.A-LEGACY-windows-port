@@ -4,6 +4,7 @@ The APK's lib/ folder only holds a small unpacker (libDecRawso). The real
 native libraries live in assets/datv7 and assets/datv8: 7z archives whose
 signature is replaced with "CORIAJ" and whose every byte is XORed with 0x61.
 """
+import hashlib
 import subprocess
 import sys
 import zipfile
@@ -12,6 +13,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 WORK = ROOT / "work"
 XOR_KEY = 0x61
+# The one APK the port is known to work with: N.O.V.A. Legacy 5.8.4a.
+APK_SHA256 = "ef570d2a31b0d167ae78d1a94bb4da847bb505342b3bb3b10865978360d90803"
 SEVENZ_MAGIC = b"7z\xbc\xaf\x27\x1c"
 # Windows ships bsdtar, which reads 7z archives.
 TAR = r"C:\Windows\System32\tar.exe"
@@ -52,6 +55,14 @@ def main() -> None:
     apks = sorted(ROOT.glob("*.apk"))
     if len(apks) != 1:
         raise SystemExit(f"expected exactly one .apk in {ROOT}, found {len(apks)}")
+    digest = hashlib.sha256(apks[0].read_bytes()).hexdigest()
+    if digest != APK_SHA256 and "--force" not in sys.argv:
+        raise SystemExit(
+            f"{apks[0].name} is not the APK this port was made for (N.O.V.A. Legacy 5.8.4a).\n"
+            f"  expected SHA-256 {APK_SHA256}\n"
+            f"  found    SHA-256 {digest}\n"
+            "Other versions will most likely not run. Pass --force to unpack it anyway."
+        )
     apk_dir = WORK / "apk"
     with zipfile.ZipFile(apks[0]) as z:
         z.extractall(apk_dir)

@@ -23,6 +23,16 @@ You need Windows 10/11 x64, Visual Studio 2022 Community with the C++ workload, 
    ```
    python tools\unpack.py
    ```
+   The port was made for one exact APK, and the script stops if yours is a different one:
+
+   | | |
+   |---|---|
+   | Package | `com.gameloft.android.ANMP.GloftNOHM` |
+   | Version | 5.8.4a (ARM64) |
+   | Size | 48,448,792 bytes |
+   | SHA-256 | `ef570d2a31b0d167ae78d1a94bb4da847bb505342b3bb3b10865978360d90803` |
+
+   You can check your file with `certutil -hashfile <file>.apk SHA256`. To try another version anyway, run `python tools\unpack.py --force`.
 3. Fetch the libraries and build:
    ```
    powershell -ExecutionPolicy Bypass -File port\setup.ps1
